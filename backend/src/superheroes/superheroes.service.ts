@@ -34,11 +34,13 @@ export class SuperheroesService {
     findAll(): SuperheroResponseDto[] {
         appLogger.log('Fetching all superheroes');
 
-        return this.superheroes.map((hero) => ({
-            id: hero.id,
-            name: hero.name,
-            superpower: hero.superpower,
-            humilityScore: hero.humilityScore,
-        }));
+        return this.superheroes
+            .map((hero) => ({
+                id: hero.id,
+                name: hero.name,
+                superpower: hero.superpower,
+                humilityScore: hero.humilityScore,
+            }))
+            .sort((a, b) => a.humilityScore - b.humilityScore); // Ensure sorting
     }
 }

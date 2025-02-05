@@ -45,4 +45,28 @@ describe('SuperheroesController (e2e)', () => {
 
     expect(Array.isArray(response.body)).toBe(true);
   });
+
+  it('GET /invalid-route - should return 404 for a non-existent route', async () => {
+    await request(app.getHttpServer())
+        .get('/invalid-route')
+        .expect(404);
+  });
+
+  it('GET /superheroes - should return superheroes sorted by humilityScore', async () => {
+    // Add multiple superheroes with different humility scores
+    await request(app.getHttpServer()).post('/superheroes').send({ name: 'Hero A', superpower: 'Speed', humility: 9 });
+    await request(app.getHttpServer()).post('/superheroes').send({ name: 'Hero B', superpower: 'Strength', humility: 5 });
+    await request(app.getHttpServer()).post('/superheroes').send({ name: 'Hero C', superpower: 'Flight', humility: 7 });
+
+    const response = await request(app.getHttpServer()).get('/superheroes').expect(200);
+
+    const heroes = response.body;
+    expect(Array.isArray(heroes)).toBe(true);
+    expect(heroes.length).toBeGreaterThanOrEqual(3);
+
+    // Ensure the list is sorted by humilityScore in ascending order
+    for (let i = 0; i < heroes.length - 1; i++) {
+      expect(heroes[i].humilityScore).toBeLessThanOrEqual(heroes[i + 1].humilityScore);
+    }
+  });
 });
