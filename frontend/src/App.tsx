@@ -45,7 +45,7 @@ function App() {
 
     return (
         <div style={{ textAlign: "center", maxWidth: "500px", margin: "auto" }}>
-            <h1>Superhero List</h1>
+            <h1>Superheros</h1>
 
             {/* Form to Add Superhero */}
             <form onSubmit={addSuperhero}>
